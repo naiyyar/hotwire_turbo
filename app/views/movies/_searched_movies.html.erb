@@ -1,0 +1,5 @@
+<% movies.each do |movie| %>
+  <div id="<%= dom_id movie %>">
+    <p><%= highlight(movie.title, params[:title_search]) %></p>
+  </div>
+<%end%>
