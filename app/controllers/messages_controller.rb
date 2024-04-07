@@ -3,7 +3,7 @@ class MessagesController < ApplicationController
 
   # GET /messages or /messages.json
   def index
-    @messages = Message.all
+    @messages = Message.order(created_at: :desc)
   end
 
   # GET /messages/1 or /messages/1.json
@@ -27,7 +27,8 @@ class MessagesController < ApplicationController
       if @message.save
         format.turbo_stream do
           render turbo_stream: [
-            turbo_stream.update('new-message-form', partial: 'messages/form', locals: { message: Message.new })
+            turbo_stream.update('new-message-form', partial: 'messages/form', locals: { message: Message.new }),
+            turbo_stream.prepend('messages', partial: 'messages/message', locals: { message: @message })
           ]
         end
         format.html { redirect_to message_url(@message), notice: "Message was successfully created." }
@@ -62,6 +63,11 @@ class MessagesController < ApplicationController
     @message.destroy
 
     respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.remove(@message)
+        ]
+      end
       format.html { redirect_to messages_url, notice: "Message was successfully destroyed." }
       format.json { head :no_content }
     end

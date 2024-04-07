@@ -4,4 +4,7 @@
     <%= message.body %>
   </p>
 
+  <%= link_to "Edit", edit_message_path(message) %> |
+  <%= button_to "Delete", message, method: :delete %>
+
 </div>
