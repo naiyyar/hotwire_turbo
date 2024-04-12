@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :posts
   resources :movies
   post :search_movies, to: 'movies#search_movies', as: :search_movies
   resources :messages do
